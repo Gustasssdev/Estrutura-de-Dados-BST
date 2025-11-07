@@ -1,33 +1,39 @@
-# Visualizador de Árvore AVL
+# 🌳 Visualizador de Árvore AVL
 
-## Descrição do projeto
+## 📋 Descrição do Projeto
 
-Este projeto é uma aplicação web simples desenvolvida para a disciplina de Estruturas de Dados. A aplicação permite visualizar e interagir graficamente com uma Árvore Binária AVL (Adelson‑Velsky e Landis).
+Este projeto é uma aplicação web simples desenvolvida para a disciplina de **Estrutura de Dados**, que permite visualizar e interagir com uma **Árvore Binária AVL** (Adelson-Velsky e Landis) de forma gráfica e intuitiva.
 
-Uma árvore AVL é uma árvore binária de busca auto‑balanceada: para qualquer nó, a diferença de altura entre as subárvores esquerda e direita (fator de balanceamento) não pode ser maior que 1. Esse balanceamento garante que operações como busca, inserção e remoção sejam executadas em tempo O(log n) na média e no pior caso.
+A árvore AVL é uma árvore binária de busca auto-balanceada, onde a diferença de altura entre as subárvores esquerda e direita de qualquer nó não pode ser maior que 1. Este balanceamento garante que as operações de busca, inserção e remoção sejam executadas em tempo O(log n).
 
-## Funcionalidades
+## ✨ Funcionalidades
 
-- Buscar um valor na árvore
-- Inserir um novo nó mantendo o balanceamento AVL
-- Remover um nó e rebalancear quando necessário
-- Visualização gráfica da árvore no navegador (Canvas)
-- Exibição automática das rotações realizadas para manter o balanceamento
-- Informações da árvore (altura, fator de balanceamento, etc.)
+A aplicação oferece as seguintes funcionalidades:
 
-## Tecnologias utilizadas
+- **🔍 Buscar Valor**: Permite buscar um valor específico na árvore AVL
+- **➕ Inserir Nó**: Adiciona um novo valor na árvore mantendo o balanceamento AVL
+- **➖ Remover Nó**: Remove um valor específico da árvore e rebalanceia quando necessário
+- **🎨 Visualização Gráfica**: Desenha a árvore de forma visual no navegador
+- **🔄 Rotações**: Exibe automaticamente as rotações (simples e duplas) necessárias para manter o balanceamento
+- **📊 Informações da Árvore**: Mostra altura, fator de balanceamento e outras métricas
 
-- HTML5 — Estrutura da página
-- CSS3 — Estilos e layout
-- JavaScript — Lógica da árvore AVL e manipulação do DOM
-- Canvas API — Renderização gráfica da árvore
+## 🛠️ Tecnologias Utilizadas
 
-## Como executar
+- **HTML5**: Estrutura da página web
+- **CSS3**: Estilização e layout da interface
+- **JavaScript**: Lógica da árvore AVL e manipulação do DOM
+- **Canvas API**: Renderização gráfica da árvore binária
 
-### Pré‑requisitos
+## 🚀 Como Executar
 
-- Navegador web moderno (Chrome, Firefox, Edge, Safari)
-- Um servidor HTTP local (ex.: Python, http-server do Node.js ou extensão Live Server do VS Code)
+### Pré-requisitos
+
+- Um navegador web moderno (Chrome, Firefox, Edge, Safari)
+- Um servidor local (pode ser qualquer um dos seguintes):
+  - Python (se instalado)
+  - Node.js com http-server
+  - Extensão Live Server do VS Code
+  - Qualquer outro servidor HTTP local
 
 ### Opção 1: Usando Python
 
@@ -42,7 +48,7 @@ python -m SimpleHTTPServer 8000
 ### Opção 2: Usando Node.js
 
 ```bash
-# Instalar http-server globalmente (apenas na primeira vez)
+# Instalar http-server globalmente (primeira vez)
 npm install -g http-server
 
 # Executar o servidor
@@ -51,104 +57,112 @@ http-server -p 8000
 
 ### Opção 3: Usando VS Code
 
-1. Instale a extensão "Live Server".
-2. Clique com o botão direito no arquivo `index.html`.
-3. Selecione "Open with Live Server".
+1. Instale a extensão "Live Server"
+2. Clique com o botão direito no arquivo `index.html`
+3. Selecione "Open with Live Server"
 
-### Acessar a aplicação
+### Acessar a Aplicação
 
-Após iniciar o servidor, abra no navegador:
+Após iniciar o servidor, abra seu navegador e acesse:
+```
 http://localhost:8000
+```
 
-## Como usar
+## 📖 Como Usar
 
-### Inserir valores
+### Inserir Valores
 
-1. Digite um número no campo "Inserir Valor".
-2. Clique em "Inserir".
-3. A árvore será balanceada automaticamente e redesenhada.
+1. Digite um número no campo de entrada "Inserir Valor"
+2. Clique no botão "Inserir"
+3. A árvore será automaticamente balanceada e redesenhada
 
-### Buscar valores
+### Buscar Valores
 
-1. Digite o valor desejado no campo "Buscar Valor".
-2. Clique em "Buscar".
-3. O nó será destacado na visualização, se encontrado.
+1. Digite o valor que deseja buscar no campo "Buscar Valor"
+2. Clique no botão "Buscar"
+3. O nó será destacado na visualização se for encontrado
 
-### Remover valores
+### Remover Valores
 
-1. Digite o valor desejado no campo "Remover Valor".
-2. Clique em "Remover".
-3. A árvore será rebalanceada automaticamente após a remoção.
+1. Digite o valor que deseja remover no campo "Remover Valor"
+2. Clique no botão "Remover"
+3. A árvore será rebalanceada automaticamente após a remoção
 
-### Limpar a árvore
+### Limpar a Árvore
 
-Clique em "Limpar Árvore" para remover todos os nós.
+- Clique no botão "Limpar Árvore" para remover todos os nós
 
-## Conceitos de Estruturas de Dados
+## 🎓 Conceitos de Estrutura de Dados
 
-### O que é uma árvore AVL?
+### O que é uma Árvore AVL?
 
-Uma árvore AVL é uma árvore binária de busca auto‑balanceada, nomeada em homenagem a Adelson‑Velsky e Landis. Ela mantém um fator de balanceamento por nó (diferença entre as alturas das subárvores esquerda e direita) que deve ser -1, 0 ou 1.
+Uma árvore AVL é uma árvore binária de busca auto-balanceada, nomeada em homenagem aos seus inventores **A**delson-**V**elsky e **L**andis. 
 
-Propriedades principais:
-- Fator de balanceamento: para cada nó, a diferença de altura entre as subárvores esquerda e direita é no máximo 1.
-- Auto‑balanceamento: após inserções e remoções, a árvore realiza rotações para manter o balanceamento.
-- Complexidade: operações de busca, inserção e remoção têm complexidade O(log n).
+### Propriedades:
 
-### Tipos de rotações
+1. **Fator de Balanceamento**: Para cada nó, a diferença de altura entre a subárvore esquerda e direita é no máximo 1
+2. **Auto-balanceamento**: Após inserções e remoções, a árvore realiza rotações para manter o balanceamento
+3. **Complexidade**: Todas as operações principais (busca, inserção, remoção) têm complexidade O(log n)
 
-- Rotação simples à direita (LL): quando o desbalanceamento ocorre à esquerda da subárvore esquerda.
-- Rotação simples à esquerda (RR): quando o desbalanceamento ocorre à direita da subárvore direita.
-- Rotação dupla esquerda‑direita (LR): quando o desbalanceamento ocorre à direita da subárvore esquerda.
-- Rotação dupla direita‑esquerda (RL): quando o desbalanceamento ocorre à esquerda da subárvore direita.
+### Tipos de Rotações:
 
-## Métodos implementados
+- **Rotação Simples à Direita (LL)**: Quando o desbalanceamento ocorre à esquerda da esquerda
+- **Rotação Simples à Esquerda (RR)**: Quando o desbalanceamento ocorre à direita da direita
+- **Rotação Dupla Esquerda-Direita (LR)**: Quando o desbalanceamento ocorre à direita da esquerda
+- **Rotação Dupla Direita-Esquerda (RL)**: Quando o desbalanceamento ocorre à esquerda da direita
 
-Classe Node (Nó)
-- constructor(valor): cria um novo nó
-- altura: retorna a altura do nó
-- fatorBalanceamento: retorna o fator de balanceamento do nó
+## 📚 Métodos Implementados
 
-Classe AVLTree (Árvore AVL)
-- inserir(valor): insere um novo valor na árvore
-- remover(valor): remove um valor da árvore
-- buscar(valor): busca um valor na árvore
-- rotacaoEsquerda(no): realiza rotação à esquerda
-- rotacaoDireita(no): realiza rotação à direita
-- balancear(no): balanceia o nó após inserção/removal
-- desenharArvore(): desenha a árvore visualmente no canvas
+### Classe Node (Nó)
+```javascript
+- constructor(valor): Cria um novo nó
+- altura: Retorna a altura do nó
+- fatorBalanceamento: Retorna o fator de balanceamento
+```
 
-## Objetivos educacionais
+### Classe AVLTree (Árvore AVL)
+```javascript
+- inserir(valor): Insere um novo valor na árvore
+- remover(valor): Remove um valor da árvore
+- buscar(valor): Busca um valor na árvore
+- rotacaoEsquerda(no): Realiza rotação à esquerda
+- rotacaoDireita(no): Realiza rotação à direita
+- balancear(no): Balanceia o nó após inserção/remoção
+- desenharArvore(): Desenha a árvore visualmente no canvas
+```
+
+## 🎯 Objetivos Educacionais
 
 Este projeto foi desenvolvido para auxiliar no aprendizado de:
-- Estruturas de dados não lineares
+
+- Estruturas de dados não-lineares
 - Árvores binárias de busca
 - Algoritmos de balanceamento
 - Complexidade de algoritmos
 - Implementação prática de conceitos teóricos
 - Visualização de estruturas de dados
 
-## Autor
+## 👨‍💻 Autor
 
-Desenvolvido como parte da disciplina de Estruturas de Dados.
+Desenvolvido como parte da disciplina de **Estrutura de Dados**.
 
-## Licença
+## 📄 Licença
 
-Projeto de código aberto disponível para fins educacionais. Sinta‑se à vontade para reutilizar e adaptar o código, observando as práticas comuns de atribuição quando aplicável.
+Este projeto é de código aberto e está disponível para fins educacionais.
 
-## Contribuições
+## 🤝 Contribuições
 
-Contribuições são bem‑vindas! Você pode:
+Contribuições são bem-vindas! Sinta-se à vontade para:
+
 - Reportar bugs
 - Sugerir novas funcionalidades
 - Melhorar a documentação
 - Enviar pull requests
 
-## Suporte
+## 📞 Suporte
 
-Para dúvidas ou sugestões, abra uma issue no repositório.
+Para dúvidas ou sugestões sobre o projeto, abra uma issue no repositório.
 
 ---
 
-Nota: Este é um projeto educacional com foco em clareza e didática. A implementação prioriza entendimento e aprendizagem dos conceitos.
-```
+**Nota**: Este é um projeto educacional desenvolvido para demonstrar conceitos de estrutura de dados. A implementação foca em clareza e fins didáticos.
