@@ -12,7 +12,6 @@ A aplicação oferece as seguintes funcionalidades:
 
 - **🔍 Buscar Valor**: Permite buscar um valor específico na árvore AVL
 - **➕ Inserir Nó**: Adiciona um novo valor na árvore mantendo o balanceamento AVL
-- **➖ Remover Nó**: Remove um valor específico da árvore e rebalanceia quando necessário
 - **🎨 Visualização Gráfica**: Desenha a árvore de forma visual no navegador
 - **🔄 Rotações**: Exibe automaticamente as rotações (simples e duplas) necessárias para manter o balanceamento
 - **📊 Informações da Árvore**: Mostra altura, fator de balanceamento e outras métricas
