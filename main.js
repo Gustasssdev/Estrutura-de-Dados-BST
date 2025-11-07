@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ AVL inicializado:', avl);
     
     let foundNode = null;
+    let zoom = d3.zoom();
 
     // ====== ELEMENTOS DO DOM ======
     const inputValue = document.getElementById('inputValue');
@@ -74,41 +75,60 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function drawTree() {
         console.log('🌳 Desenhando árvore...');
-        const svg = document.getElementById('tree-svg');
-        if (!svg) return;
-
-        svg.innerHTML = '';
+        const svg = d3.select('#tree-svg');
+        svg.selectAll('*').remove();
 
         if (!avl.raiz) {
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', '50%');
-            text.setAttribute('y', '50%');
-            text.setAttribute('text-anchor', 'middle');
-            text.setAttribute('dominant-baseline', 'middle');
-            text.setAttribute('fill', '#6b7280');
-            text.setAttribute('font-size', '16');
-            text.textContent = 'Árvore vazia';
-            svg.appendChild(text);
+            svg.append('text')
+                .attr('x', '50%')
+                .attr('y', '50%')
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .attr('fill', '#6b7280')
+                .attr('font-size', '16')
+                .text('Árvore vazia');
             return;
         }
 
-        const width = svg.clientWidth || 800;
-        const height = svg.clientHeight || 400;
+        const width = svg.node().clientWidth || 800;
+        const height = svg.node().clientHeight || 600;
+
+        // Calcular espaçamento baseado no tamanho da árvore
+        const nodeCount = avl.tamanho();
+        const treeHeight = avl.altura();
+        const horizontalSpacing = Math.max(width - 100, nodeCount * 40);
+        const verticalSpacing = Math.max(height - 100, treeHeight * 80);
 
         const treeData = convertToD3(avl.raiz);
         const hierarchy = d3.hierarchy(treeData);
-        const treeLayout = d3.tree().size([width - 60, height - 60]);
+        const treeLayout = d3.tree().size([horizontalSpacing, verticalSpacing]);
         const treeStructure = treeLayout(hierarchy);
 
-        const g = d3.select('#tree-svg')
-            .append('g')
-            .attr('transform', 'translate(30, 30)');
+        // Container principal com zoom
+        const g = svg.append('g')
+            .attr('class', 'zoom-container');
+
+        // Configurar zoom
+        zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on('zoom', (event) => {
+                g.attr('transform', event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Centralizar árvore inicialmente
+        const initialX = (width - horizontalSpacing) / 2;
+        const initialY = 50;
+        const initialTransform = d3.zoomIdentity.translate(initialX, initialY);
+        svg.call(zoom.transform, initialTransform);
 
         // Links
         g.selectAll('.link')
             .data(treeStructure.links())
             .enter()
             .append('line')
+            .attr('class', 'link')
             .attr('x1', d => d.source.x)
             .attr('y1', d => d.source.y)
             .attr('x2', d => d.target.x)
@@ -121,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .data(treeStructure.descendants())
             .enter()
             .append('g')
+            .attr('class', 'node')
             .attr('transform', d => `translate(${d.x},${d.y})`);
 
         nodes.append('circle')
@@ -155,6 +176,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 convertToD3(node.dir)
             ].filter(d => d !== null)
         };
+    }
+
+    // Função para resetar zoom
+    function resetZoom() {
+        const svg = d3.select('#tree-svg');
+        const width = svg.node().clientWidth || 800;
+        const nodeCount = avl.tamanho();
+        const horizontalSpacing = Math.max(width - 100, nodeCount * 40);
+        const initialX = (width - horizontalSpacing) / 2;
+        const initialY = 50;
+        const initialTransform = d3.zoomIdentity.translate(initialX, initialY);
+        svg.transition().duration(750).call(zoom.transform, initialTransform);
     }
 
     // ====== EVENT LISTENERS ======
@@ -225,7 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
             e.preventDefault();
             console.log('🔘 Botão atualizar clicado');
             updateStats();
-            showMessage('🔄 Atualizado');
+            resetZoom();
+            showMessage('🔄 Atualizado e centralizado');
         });
     }
 
@@ -263,4 +297,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Inicializando...');
     updateStats();
     console.log('✅ Sistema pronto!');
+    console.log('💡 Dica: Use scroll para zoom, arraste para mover a árvore');
 });
