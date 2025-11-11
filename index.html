@@ -10,14 +10,12 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <aside class="sidebar">
             <div class="sidebar-header">
                 <h2>Controles</h2>
                 <button class="close-btn" id="closeSidebar">✕</button>
             </div>
 
-            <!-- Inputs -->
             <div class="input-section">
                 <div class="input-group">
                     <label>➕ Adicionar</label>
@@ -46,7 +44,6 @@
                 </div>
             </div>
 
-            <!-- Info Cards -->
             <div class="info-section">
                 <h3>Estatísticas</h3>
                 <div class="info-cards">
@@ -66,10 +63,17 @@
                         <p class="label">Máximo</p>
                         <p class="value" id="countMax">-</p>
                     </div>
+                    <div class="info-card card-orange">
+                        <p class="label">Comp. Interno</p>
+                        <p class="value" id="countCI">0</p>
+                    </div>
+                    <div class="info-card" id="balanceCard">
+                        <p class="label">Status</p>
+                        <p class="value" id="balanceStatus">-</p>
+                    </div>
                 </div>
             </div>
 
-            <!-- Traversals -->
             <div class="traversal-section">
                 <h3>Travessias</h3>
                 <div class="traversal-item">
@@ -84,18 +88,20 @@
                     <p class="traversal-label">Pós-Ordem</p>
                     <p class="traversal-values" id="posOrdem">Vazio</p>
                 </div>
+                <div class="traversal-item">
+                    <p class="traversal-label">Level Order</p>
+                    <p class="traversal-values" id="levelOrdem">Vazio</p>
+                </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="action-buttons">
+                <button id="balanceBtn" class="btn btn-full btn-orange" style="display: none;">⚖️ Balancear Árvore</button>
                 <button id="refreshBtn" class="btn btn-full btn-cyan">⟳ Atualizar</button>
                 <button id="clearBtn" class="btn btn-full btn-red">🗑️ Limpar</button>
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main">
-            <!-- Header -->
             <header class="header">
                 <button class="menu-btn" id="openSidebar">☰</button>
                 <div class="header-content">
@@ -104,7 +110,6 @@
                 </div>
             </header>
 
-            <!-- Canvas -->
             <div class="canvas-container">
                 <h2>Visualização</h2>
                 <svg id="tree-svg"></svg>
@@ -114,7 +119,6 @@
                 </p>
             </div>
 
-            <!-- Message -->
             <div class="message" id="message"></div>
         </main>
     </div>

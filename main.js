@@ -1,24 +1,21 @@
-// ====== INICIALIZAÇÃO ======
 console.log('✅ main.js carregado!');
 
-// Esperar o DOM estar pronto
 document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ DOM carregado!');
     
-    // Inicializar AVL
     const avl = new AVL();
     console.log('✅ AVL inicializado:', avl);
     
     let foundNode = null;
     let zoom = d3.zoom();
 
-    // ====== ELEMENTOS DO DOM ======
     const inputValue = document.getElementById('inputValue');
     const searchValue = document.getElementById('searchValue');
     const addBtn = document.getElementById('addBtn');
     const searchBtn = document.getElementById('searchBtn');
     const clearBtn = document.getElementById('clearBtn');
     const refreshBtn = document.getElementById('refreshBtn');
+    const balanceBtn = document.getElementById('balanceBtn');
     const message = document.getElementById('message');
     const sidebar = document.querySelector('.sidebar');
     const openSidebar = document.getElementById('openSidebar');
@@ -31,10 +28,10 @@ document.addEventListener('DOMContentLoaded', function() {
         searchBtn: !!searchBtn,
         clearBtn: !!clearBtn,
         refreshBtn: !!refreshBtn,
+        balanceBtn: !!balanceBtn,
         message: !!message
     });
 
-    // ====== FUNÇÕES ======
     function showMessage(text) {
         console.log('💬 Mensagem:', text);
         if (message) {
@@ -53,22 +50,42 @@ document.addEventListener('DOMContentLoaded', function() {
         const countAltura = document.getElementById('countAltura');
         const countMin = document.getElementById('countMin');
         const countMax = document.getElementById('countMax');
+        const countCI = document.getElementById('countCI');
+        const balanceStatus = document.getElementById('balanceStatus');
+        const balanceCard = document.getElementById('balanceCard');
+        const balanceBtn = document.getElementById('balanceBtn');
         const emOrdemEl = document.getElementById('emOrdem');
         const preOrdemEl = document.getElementById('preOrdem');
         const posOrdemEl = document.getElementById('posOrdem');
+        const levelOrdemEl = document.getElementById('levelOrdem');
 
         if (countNos) countNos.textContent = avl.tamanho();
         if (countAltura) countAltura.textContent = avl.altura();
         if (countMin) countMin.textContent = avl.encontrarMin() ?? '-';
         if (countMax) countMax.textContent = avl.encontrarMax() ?? '-';
+        if (countCI) countCI.textContent = avl.internalPathLength();
+
+        const estaBalanceada = avl.estaBalanceada();
+        if (balanceStatus) {
+            balanceStatus.textContent = estaBalanceada ? '✓ Balanceada' : '✗ Desbalanceada';
+        }
+        if (balanceCard) {
+            balanceCard.className = estaBalanceada ? 'info-card card-green' : 'info-card card-yellow';
+        }
+        
+        if (balanceBtn) {
+            balanceBtn.style.display = estaBalanceada ? 'none' : 'block';
+        }
 
         const emOrdem = avl.ordem();
         const preOrdem = avl.getPreOrdem();
         const posOrdem = avl.getPosOrdem();
+        const levelOrdem = avl.getLevelOrder();
 
         if (emOrdemEl) emOrdemEl.textContent = emOrdem.length > 0 ? emOrdem.join(' → ') : 'Vazio';
         if (preOrdemEl) preOrdemEl.textContent = preOrdem.length > 0 ? preOrdem.join(' → ') : 'Vazio';
         if (posOrdemEl) posOrdemEl.textContent = posOrdem.length > 0 ? posOrdem.join(' → ') : 'Vazio';
+        if (levelOrdemEl) levelOrdemEl.textContent = levelOrdem.length > 0 ? levelOrdem.join(' → ') : 'Vazio';
 
         drawTree();
     }
@@ -93,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const width = svg.node().clientWidth || 800;
         const height = svg.node().clientHeight || 600;
 
-        // Calcular espaçamento baseado no tamanho da árvore
         const nodeCount = avl.tamanho();
         const treeHeight = avl.altura();
         const horizontalSpacing = Math.max(width - 100, nodeCount * 40);
@@ -104,11 +120,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const treeLayout = d3.tree().size([horizontalSpacing, verticalSpacing]);
         const treeStructure = treeLayout(hierarchy);
 
-        // Container principal com zoom
         const g = svg.append('g')
             .attr('class', 'zoom-container');
 
-        // Configurar zoom
         zoom = d3.zoom()
             .scaleExtent([0.1, 4])
             .on('zoom', (event) => {
@@ -117,13 +131,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
         svg.call(zoom);
 
-        // Centralizar árvore inicialmente
         const initialX = (width - horizontalSpacing) / 2;
         const initialY = 50;
         const initialTransform = d3.zoomIdentity.translate(initialX, initialY);
         svg.call(zoom.transform, initialTransform);
 
-        // Links
         g.selectAll('.link')
             .data(treeStructure.links())
             .enter()
@@ -136,7 +148,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .attr('stroke', '#4b5563')
             .attr('stroke-width', 2);
 
-        // Nodes
         const nodes = g.selectAll('.node')
             .data(treeStructure.descendants())
             .enter()
@@ -178,7 +189,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
-    // Função para resetar zoom
     function resetZoom() {
         const svg = d3.select('#tree-svg');
         const width = svg.node().clientWidth || 800;
@@ -190,7 +200,6 @@ document.addEventListener('DOMContentLoaded', function() {
         svg.transition().duration(750).call(zoom.transform, initialTransform);
     }
 
-    // ====== EVENT LISTENERS ======
     if (addBtn) {
         addBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -263,6 +272,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    if (balanceBtn) {
+        balanceBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('🔘 Botão balancear clicado');
+            avl.balancearArvore();
+            foundNode = null;
+            updateStats();
+            showMessage('⚖️ Árvore balanceada com sucesso!');
+        });
+    }
+
     if (inputValue) {
         inputValue.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
@@ -293,7 +313,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.addEventListener('resize', updateStats);
 
-    // ====== INICIAR ======
     console.log('✅ Inicializando...');
     updateStats();
     console.log('✅ Sistema pronto!');

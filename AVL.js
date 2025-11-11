@@ -12,7 +12,6 @@ class AVL {
         this.raiz = null;
     }
 
-    // Função max implementada manualmente (substitui Math.max)
     max(a, b) {
         return a > b ? a : b;
     }
@@ -26,7 +25,7 @@ class AVL {
         if (no === null) return;
         const alturaEsq = this.calcularAltura(no.esq);
         const alturaDir = this.calcularAltura(no.dir);
-        no.altura = 1 + this.max(alturaEsq, alturaDir); // Usando max manual
+        no.altura = 1 + this.max(alturaEsq, alturaDir);
     }
 
     calcularFatorBalanceamento(no) {
@@ -37,39 +36,59 @@ class AVL {
     rotacaoDireita(y) {
         const x = y.esq;
         const T2 = x.dir;
+
         x.dir = y;
         y.esq = T2;
+
         this.atualizarAltura(y);
         this.atualizarAltura(x);
+
         return x;
     }
 
     rotacaoEsquerda(x) {
         const y = x.dir;
         const T2 = y.esq;
+
         y.esq = x;
         x.dir = T2;
+
         this.atualizarAltura(x);
         this.atualizarAltura(y);
+
         return y;
     }
 
     inserirNo(no, valor) {
-        if (no === null) return new Node(valor);
+        if (no === null) {
+            return new Node(valor);
+        }
 
-        if (valor < no.info) no.esq = this.inserirNo(no.esq, valor);
-        else if (valor > no.info) no.dir = this.inserirNo(no.dir, valor);
-        else return no;
+        if (valor < no.info) {
+            no.esq = this.inserirNo(no.esq, valor);
+        } else if (valor > no.info) {
+            no.dir = this.inserirNo(no.dir, valor);
+        } else {
+            return no;
+        }
 
         this.atualizarAltura(no);
+
         const fb = this.calcularFatorBalanceamento(no);
 
-        if (fb > 1 && valor < no.esq.info) return this.rotacaoDireita(no);
-        if (fb < -1 && valor > no.dir.info) return this.rotacaoEsquerda(no);
+        if (fb > 1 && valor < no.esq.info) {
+            return this.rotacaoDireita(no);
+        }
+
+        if (fb < -1 && valor > no.dir.info) {
+            return this.rotacaoEsquerda(no);
+        }
+
         if (fb > 1 && valor > no.esq.info) {
             no.esq = this.rotacaoEsquerda(no.esq);
             return this.rotacaoDireita(no);
         }
+
         if (fb < -1 && valor < no.dir.info) {
             no.dir = this.rotacaoDireita(no.dir);
             return this.rotacaoEsquerda(no);
@@ -82,35 +101,96 @@ class AVL {
         this.raiz = this.inserirNo(this.raiz, valor);
     }
 
-    buscarNo(no, valor) {
-        if (no === null) return null;
-        if (valor === no.info) return no;
-        if (valor < no.info) return this.buscarNo(no.esq, valor);
-        return this.buscarNo(no.dir, valor);
+    buscar(no, valor) {
+        if (no === null) {
+            return null;
+        }
+
+        if (valor === no.info) {
+            return no;
+        }
+
+        if (valor < no.info) {
+            return this.buscar(no.esq, valor);
+        } else {
+            return this.buscar(no.dir, valor);
+        }
     }
 
     get(valor) {
-        return this.buscarNo(this.raiz, valor);
+        return this.buscar(this.raiz, valor);
     }
 
-    encontrarMinimo(no) {
-        if (no === null) return null;
-        while (no.esq) no = no.esq;
-        return no.info;
+    emOrdem(no, resultado) {
+        if (no !== null) {
+            this.emOrdem(no.esq, resultado);
+            resultado.push(no.info);
+            this.emOrdem(no.dir, resultado);
+        }
     }
 
-    encontrarMaximo(no) {
-        if (no === null) return null;
-        while (no.dir) no = no.dir;
-        return no.info;
+    ordem() {
+        const resultado = [];
+        this.emOrdem(this.raiz, resultado);
+        return resultado;
     }
 
-    encontrarMin() {
-        return this.encontrarMinimo(this.raiz);
+    preOrdem(no, resultado) {
+        if (no !== null) {
+            resultado.push(no.info);
+            this.preOrdem(no.esq, resultado);
+            this.preOrdem(no.dir, resultado);
+        }
     }
 
-    encontrarMax() {
-        return this.encontrarMaximo(this.raiz);
+    getPreOrdem() {
+        const resultado = [];
+        this.preOrdem(this.raiz, resultado);
+        return resultado;
+    }
+
+    posOrdem(no, resultado) {
+        if (no !== null) {
+            this.posOrdem(no.esq, resultado);
+            this.posOrdem(no.dir, resultado);
+            resultado.push(no.info);
+        }
+    }
+
+    getPosOrdem() {
+        const resultado = [];
+        this.posOrdem(this.raiz, resultado);
+        return resultado;
+    }
+
+    getLevelOrder() {
+        if (!this.raiz) return [];
+        
+        const resultado = [];
+        const fila = [this.raiz];
+        
+        while (fila.length > 0) {
+            const no = fila.shift();
+            resultado.push(no.info);
+            
+            if (no.esq !== null) {
+                fila.push(no.esq);
+            }
+            if (no.dir !== null) {
+                fila.push(no.dir);
+            }
+        }
+        
+        return resultado;
+    }
+
+    getAltura(no) {
+        if (no === null) return 0;
+        return no.altura;
+    }
+
+    altura() {
+        return this.getAltura(this.raiz);
     }
 
     contarNos(no) {
@@ -122,62 +202,65 @@ class AVL {
         return this.contarNos(this.raiz);
     }
 
-    altura() {
-        return this.calcularAltura(this.raiz);
+    encontrarMin(no = this.raiz) {
+        if (no === null) return null;
+        while (no.esq !== null) {
+            no = no.esq;
+        }
+        return no.info;
     }
 
-    calcularComprimentoInterno(no, profundidade) {
+    encontrarMax(no = this.raiz) {
+        if (no === null) return null;
+        while (no.dir !== null) {
+            no = no.dir;
+        }
+        return no.info;
+    }
+
+    internalPathLength(no = this.raiz, profundidade = 0) {
         if (no === null) return 0;
-        return (
-            profundidade +
-            this.calcularComprimentoInterno(no.esq, profundidade + 1) +
-            this.calcularComprimentoInterno(no.dir, profundidade + 1)
-        );
+        return profundidade + 
+               this.internalPathLength(no.esq, profundidade + 1) +
+               this.internalPathLength(no.dir, profundidade + 1);
     }
 
-    internalPathLength() {
-        return this.calcularComprimentoInterno(this.raiz, 0);
-    }
+    verificarBalanceamentoRecursivo(no) {
+        if (no === null) return true;
 
-    emOrdem(no, resultado) {
-        if (no) {
-            this.emOrdem(no.esq, resultado);
-            resultado.push(no.info);
-            this.emOrdem(no.dir, resultado);
+        const fb = this.calcularFatorBalanceamento(no);
+        
+        if (fb < -1 || fb > 1) {
+            return false;
         }
+
+        return this.verificarBalanceamentoRecursivo(no.esq) && 
+               this.verificarBalanceamentoRecursivo(no.dir);
     }
 
-    preOrdem(no, resultado) {
-        if (no) {
-            resultado.push(no.info);
-            this.preOrdem(no.esq, resultado);
-            this.preOrdem(no.dir, resultado);
-        }
+    estaBalanceada() {
+        return this.verificarBalanceamentoRecursivo(this.raiz);
     }
 
-    posOrdem(no, resultado) {
-        if (no) {
-            this.posOrdem(no.esq, resultado);
-            this.posOrdem(no.dir, resultado);
-            resultado.push(no.info);
-        }
+    balancearArvore() {
+        const valores = this.ordem();
+        
+        this.raiz = null;
+        
+        this.raiz = this.construirArvoreBalanceada(valores, 0, valores.length - 1);
     }
 
-    ordem() {
-        const res = [];
-        this.emOrdem(this.raiz, res);
-        return res;
-    }
+    construirArvoreBalanceada(valores, inicio, fim) {
+        if (inicio > fim) return null;
 
-    getPreOrdem() {
-        const res = [];
-        this.preOrdem(this.raiz, res);
-        return res;
-    }
+        const meio = Math.floor((inicio + fim) / 2);
+        const no = new Node(valores[meio]);
 
-    getPosOrdem() {
-        const res = [];
-        this.posOrdem(this.raiz, res);
-        return res;
+        no.esq = this.construirArvoreBalanceada(valores, inicio, meio - 1);
+        no.dir = this.construirArvoreBalanceada(valores, meio + 1, fim);
+
+        this.atualizarAltura(no);
+
+        return no;
     }
 }
